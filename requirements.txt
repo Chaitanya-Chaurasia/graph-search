@@ -1,0 +1,15 @@
+# Core graph & geo
+networkx>=3.0
+osmnx>=1.6          # OSM graph building (optional: pyrosm for .pbf)
+shapely>=2.0        # geometry (used by osmnx)
+
+# API
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.0
+
+# Utils
+python-dotenv>=1.0.0
+
+# Tests
+pytest>=7.0
