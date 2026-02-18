@@ -1,0 +1,39 @@
+# Python (venv lives in backend/)
+backend/venv/
+backend/.venv/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+dist/
+build/
+*.egg
+
+# Graph / data (large or cached)
+data/graph_cache/
+data/*.gpickle
+data/*.osm.pbf
+data/*.json
+!data/.gitkeep
+
+# Env
+.env
+.env.local
+*.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Next.js / frontend
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env*.local
+frontend/vercel.json
+
+# Logs
+*.log
+npm-debug.log*

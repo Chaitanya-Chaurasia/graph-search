@@ -1,4 +1,7 @@
 from .schemas import (
+    NearestNodeAlgorithm,
+    NodeData,
+    EdgeData,
     LatLon,
     ShortestRequest,
     ShortestResponse,
@@ -6,6 +9,9 @@ from .schemas import (
 )
 
 __all__ = [
+    "NearestNodeAlgorithm",
+    "NodeData",
+    "EdgeData",
     "LatLon",
     "ShortestRequest",
     "ShortestResponse",

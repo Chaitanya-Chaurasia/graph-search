@@ -1,6 +1,38 @@
-"""Pydantic request/response models."""
-from pydantic import BaseModel, Field
+from enum import Enum
 
+from pydantic import BaseModel, ConfigDict, Field
+
+
+# ---------------------------------------------------------------------------
+# Graph data models
+# ---------------------------------------------------------------------------
+
+class NearestNodeAlgorithm(str, Enum):
+    """Algorithm used by Graph.get_nearest_node()."""
+    LINEAR = "linear"       # O(n) brute-force scan with euclidean distance
+    KDTREE = "kdtree"       # scipy KD-tree (TODO)
+
+class NodeData(BaseModel):
+    """ 
+    Geographic node with lat/lon. Extra OSM attributes allowed. 
+    TODO: Add traffic scores (static, then dynamic as attrs)
+    TODO: Tolls, croad quality.
+    """
+    lat: float
+    lon: float
+    model_config = ConfigDict(extra="allow")
+
+
+class EdgeData(BaseModel):
+    """Directed edge with distance and optional speed limit."""
+    length_m: float
+    max_speed_kmh: float | None = None
+    model_config = ConfigDict(extra="allow")
+
+
+# ---------------------------------------------------------------------------
+# API request / response schemas
+# ---------------------------------------------------------------------------
 
 class LatLon(BaseModel):
     lat: float = Field(..., ge=-90, le=90)

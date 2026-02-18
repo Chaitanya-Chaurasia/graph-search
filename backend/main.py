@@ -47,7 +47,7 @@ def map_nodes(min_lat: float | None = None, max_lat: float | None = None, min_lo
     g = get_graph()
     nodes = []
     for nid, data in g.nodes().items():
-        lat, lon = data["lat"], data["lon"]
+        lat, lon = data.lat, data.lon
         if min_lat is not None and lat < min_lat:
             continue
         if max_lat is not None and lat > max_lat:

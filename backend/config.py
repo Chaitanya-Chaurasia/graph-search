@@ -1,5 +1,6 @@
 """App configuration."""
 from pathlib import Path
+from backend.models import NearestNodeAlgorithm
 
 # Paths
 ROOT = Path(__file__).resolve().parent.parent
@@ -9,6 +10,9 @@ GRAPH_CACHE = DATA_DIR / "graph_cache"
 # OSM / graph
 OSM_PLACE = "Piedmont, California, USA"  # small area for fast load; change to your city
 DEFAULT_SPEED_KMH = 50.0  # fallback when OSM has no maxspeed
+
+# Algorithms
+NEAREST_NODE_ALGORITHM = NearestNodeAlgorithm.LINEAR
 
 # Grid (for Phase 2 partitions)
 GRID_CELL_DEG = 0.01  # ~1 km

@@ -50,7 +50,12 @@ def load_graph_from_osm(place: str | None = None, use_cache: bool = True) -> Gra
 
     G_ox = ox.graph_from_place(place, network_type="drive")
     G_ox = ox.add_edge_speeds(G_ox)
-    G_ox = ox.add_edge_lengths(G_ox)
+    # OSMnx v2 moved add_edge_lengths to ox.distance
+    add_lengths = getattr(ox, "add_edge_lengths", None) or getattr(
+        getattr(ox, "distance", None), "add_edge_lengths", None
+    )
+    if add_lengths is not None:
+        G_ox = add_lengths(G_ox)
 
     graph = Graph()
     for n, data in G_ox.nodes(data=True):

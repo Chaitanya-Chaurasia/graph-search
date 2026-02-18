@@ -5,6 +5,8 @@ import math
 import heapq
 from typing import TYPE_CHECKING
 
+from backend.config import NEAREST_NODE_ALGORITHM
+
 if TYPE_CHECKING:
     from .graph import Graph
 
@@ -64,8 +66,8 @@ def shortest_path(
     Returns (path as list of (lat, lon), total cost).
     Cost is distance_m if by_time=False, else duration_sec.
     """
-    start = graph.get_nearest_node(origin_lat, origin_lon)
-    goal = graph.get_nearest_node(dest_lat, dest_lon)
+    start = graph.get_nearest_node(origin_lat, origin_lon, algorithm=NEAREST_NODE_ALGORITHM)
+    goal = graph.get_nearest_node(dest_lat, dest_lon, algorithm=NEAREST_NODE_ALGORITHM)
     if start is None or goal is None:
         return [], math.inf
     weight_fn = graph.edge_weight_time if by_time else graph.edge_weight_distance
@@ -74,5 +76,5 @@ def shortest_path(
     for nid in path_ids:
         n = graph.node(nid)
         if n:
-            path_points.append((n["lat"], n["lon"]))
+            path_points.append((n.lat, n.lon))
     return path_points, cost
