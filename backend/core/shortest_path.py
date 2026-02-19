@@ -1,4 +1,6 @@
 """Shortest path by distance (Dijkstra). Snap (lat,lon) to nearest node."""
+
+# for lazy loading Graph in _dijkstra(Graph, **attr)
 from __future__ import annotations
 
 import math
@@ -9,7 +11,6 @@ from backend.config import NEAREST_NODE_ALGORITHM
 
 if TYPE_CHECKING:
     from .graph import Graph
-
 
 def _dijkstra(
     graph: Graph,

@@ -20,7 +20,7 @@ from __future__ import annotations
 import math
 from collections import defaultdict
 
-from backend.models import NodeData, EdgeData, NearestNodeAlgorithm
+from backend.models import NodeData, EdgeData, NodeMap, AdjacencyMap, NodeList, NearestNodeAlgorithm
 
 class Graph:
     """
@@ -37,9 +37,9 @@ class Graph:
     """
 
     def __init__(self) -> None:
-        self._nodes: dict[int, NodeData] = {}
-        self._edges: defaultdict[int, dict[int, EdgeData]] = defaultdict(dict)
-        self._node_list: list[tuple[float, float, int]] = []
+        self._nodes: NodeMap = {}
+        self._edges: AdjacencyMap = defaultdict(dict)
+        self._node_list: NodeList = []
 
     def add_node(self, nid: int, lat: float, lon: float, **attrs) -> None:
         self._nodes[nid] = NodeData(lat=lat, lon=lon, **attrs)
@@ -80,8 +80,6 @@ class Graph:
             return self._nearest_linear(lat, lon)
         elif algorithm == NearestNodeAlgorithm.KDTREE:
             raise NotImplementedError("KD-tree nearest neighbor not yet implemented")
-        else:
-            raise ValueError(f"Unknown algorithm: {algorithm}")
 
     def _nearest_linear(self, lat: float, lon: float) -> int:
         """O(n) brute-force scan. Fine for small graphs."""
