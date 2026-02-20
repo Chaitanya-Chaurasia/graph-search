@@ -8,26 +8,6 @@ except ImportError:
     ox = None
 
 
-def _parse_speed_kmh(maxspeed_value) -> float:
-    """Parse OSM maxspeed tag to a single float in km/h."""
-    if maxspeed_value is None or (isinstance(maxspeed_value, float) and maxspeed_value != maxspeed_value):
-        return DEFAULT_SPEED_KMH
-    if isinstance(maxspeed_value, (int, float)):
-        return float(maxspeed_value)
-    s = str(maxspeed_value).strip()
-    if not s:
-        return DEFAULT_SPEED_KMH
-    # "50", "50 mph", "30 mph"
-    parts = s.lower().split()
-    try:
-        val = float(parts[0])
-    except ValueError:
-        return DEFAULT_SPEED_KMH
-    if len(parts) > 1 and "mph" in parts[1]:
-        val *= 1.60934
-    return val
-
-
 def load_graph_from_osm(place: str | None = None, use_cache: bool = True) -> Graph:
     """
     Download OSM graph for a place (e.g. city name) and convert to our Graph.
@@ -37,7 +17,6 @@ def load_graph_from_osm(place: str | None = None, use_cache: bool = True) -> Gra
         raise ImportError("Install osmnx: pip install osmnx")
     place = place or OSM_PLACE
 
-    # Optional: cache by place name to avoid re-downloading
     from ..config import GRAPH_CACHE
     import hashlib
     cache_key = hashlib.md5(place.encode()).hexdigest()[:12]
@@ -48,14 +27,10 @@ def load_graph_from_osm(place: str | None = None, use_cache: bool = True) -> Gra
             G = pickle.load(f)
         return G
 
+    # graph_from_place auto-adds edge lengths (meters)
     G_ox = ox.graph_from_place(place, network_type="drive")
-    G_ox = ox.add_edge_speeds(G_ox)
-    # OSMnx v2 moved add_edge_lengths to ox.distance
-    add_lengths = getattr(ox, "add_edge_lengths", None) or getattr(
-        getattr(ox, "distance", None), "add_edge_lengths", None
-    )
-    if add_lengths is not None:
-        G_ox = add_lengths(G_ox)
+    # add_edge_speeds imputes speed_kph from maxspeed tags + highway-type fallbacks
+    G_ox = ox.routing.add_edge_speeds(G_ox, fallback=DEFAULT_SPEED_KMH)
 
     graph = Graph()
     for n, data in G_ox.nodes(data=True):
@@ -67,8 +42,7 @@ def load_graph_from_osm(place: str | None = None, use_cache: bool = True) -> Gra
         length_m = float(data.get("length", 0) or 0)
         if length_m <= 0:
             continue
-        maxspeed = data.get("maxspeed", DEFAULT_SPEED_KMH)
-        speed_kmh = _parse_speed_kmh(maxspeed)
+        speed_kmh = data.get("speed_kph", DEFAULT_SPEED_KMH)
         graph.add_edge(int(u), int(v), length_m=length_m, max_speed_kmh=speed_kmh)
 
     if use_cache:
