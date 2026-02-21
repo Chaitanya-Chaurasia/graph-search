@@ -1,4 +1,4 @@
 from .graph import Graph
-from .shortest_path import shortest_path
+from .shortest_path import PathFinder
 
-__all__ = ["Graph", "shortest_path"]
+__all__ = ["Graph", "PathFinder"]
