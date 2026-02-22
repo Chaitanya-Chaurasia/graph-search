@@ -1,0 +1,14 @@
+[project]
+name = "graph-search"
+version = "0.1.0"
+description = "Maps clone with partitioned graph search and ETA"
+requires-python = ">=3.13"
+dependencies = [
+    "networkx>=3.0",
+    "osmnx>=1.6",
+    "shapely>=2.0",
+    "fastapi>=0.109.0",
+    "uvicorn[standard]>=0.27.0",
+    "pydantic>=2.0",
+    "python-dotenv>=1.0.0",
+]

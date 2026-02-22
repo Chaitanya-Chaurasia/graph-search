@@ -1,4 +1,3 @@
-"""Runtime application state, initialized once during FastAPI lifespan."""
 from backend.core import Graph, PathFinder
 from backend.data import load_graph_from_osm
 

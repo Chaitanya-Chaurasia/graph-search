@@ -13,7 +13,6 @@ async def lifespan(app: FastAPI):
     app.state.app_state = AppState()
     yield
 
-
 app = FastAPI(title="Shortest Path on Graph", lifespan=lifespan)
 
 app.add_middleware(
